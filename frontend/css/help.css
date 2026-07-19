@@ -1,0 +1,60 @@
+/* SafeNet — help & support (extends design-system.css) */
+
+/* Hero search */
+.help-hero {
+  background: linear-gradient(150deg, var(--navy-mid) 0%, var(--navy-deep) 100%);
+  border-radius: 18px; padding: 42px 38px; margin-bottom: 28px; position: relative; overflow: hidden;
+}
+.help-hero::after {
+  content: ''; position: absolute; right: -60px; top: -60px; width: 260px; height: 260px;
+  border-radius: 50%; background: radial-gradient(circle, rgba(85,217,201,0.16) 0%, transparent 70%);
+}
+.help-hero h2 { font-family: var(--display); font-size: 23px; font-weight: 600; color: #fff; margin-bottom: 6px; position: relative; }
+.help-hero p { font-size: 13px; color: #8FA8C6; margin-bottom: 22px; position: relative; }
+.help-hero .search-wrap { max-width: 480px; position: relative; }
+.help-hero .search-input { padding: 13px 14px 13px 42px; border: none; border-radius: 11px; box-shadow: var(--shadow-lg); }
+
+/* Quick links */
+.quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+.quick-card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 13px; padding: 18px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px; cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform .15s; text-decoration: none;
+}
+.quick-card:hover { border-color: var(--pulse); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.quick-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.quick-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+.quick-sub { font-size: 11px; color: var(--slate); }
+
+/* FAQ accordion */
+.faq-item { border-bottom: 1px solid var(--line-soft); }
+.faq-item:last-child { border-bottom: none; }
+.faq-question { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink); transition: background 0.12s; user-select: none; }
+.faq-question:hover { background: #FAFBFD; }
+.faq-chevron { transition: transform 0.25s var(--ease); color: var(--slate); flex-shrink: 0; }
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+.faq-answer { display: none; padding: 0 20px 18px; font-size: 13px; color: var(--slate); line-height: 1.7; }
+.faq-item.open .faq-answer { display: block; animation: fadeUp 0.25s var(--ease); }
+
+/* Contact cards */
+.contact-card { padding: 16px 20px; border-bottom: 1px solid var(--line-soft); display: flex; align-items: flex-start; gap: 12px; }
+.contact-card:last-child { border-bottom: none; }
+.contact-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.contact-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.contact-detail { font-size: 12px; color: var(--slate); margin-top: 2px; }
+.contact-link { font-size: 12px; color: var(--pulse); font-weight: 500; text-decoration: none; display: inline-block; margin-top: 4px; }
+.contact-link:hover { text-decoration: underline; }
+
+/* Status indicator */
+.status-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid var(--line-soft); font-size: 13px; }
+.status-row:last-child { border-bottom: none; }
+.status-name { color: var(--ink); font-weight: 500; }
+.status-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--vital-green); animation: blink 2.4s ease-in-out infinite; }
+
+/* Toast (static element, bottom-right) */
+.toast { position: fixed; bottom: 24px; right: 24px; left: auto; transform: none; display: none; }
+.toast.show { display: flex; animation: toastIn 0.3s var(--ease); }
+
+@media (max-width: 1050px) {
+  .quick-grid { grid-template-columns: repeat(2,1fr); }
+}

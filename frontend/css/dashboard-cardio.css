@@ -1,0 +1,54 @@
+/* SafeNet — cardiology dashboard (extends design-system.css) */
+
+.stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+
+/* ── ECG strip: the flagship monitoring visual ── */
+.ecg-container {
+  background: radial-gradient(120% 140% at 50% 0%, #071A12 0%, #020E1A 70%);
+  border-radius: 0 0 13px 13px; padding: 24px 20px; position: relative;
+  overflow: hidden; height: 168px; display: flex; align-items: center;
+}
+.ecg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,230,150,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,230,150,0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.ecg-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ecg-labels { position: absolute; right: 14px; top: 12px; display: flex; flex-direction: column; gap: 4px; z-index: 2; text-align: right; }
+.ecg-label-item { font-family: var(--mono); font-size: 10px; color: rgba(0,255,150,0.55); }
+
+/* ── Patient table ── */
+.patient-table { width: 100%; border-collapse: collapse; }
+.patient-table th {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--slate);
+  padding: 11px 20px; text-align: left; background: var(--cloud); border-bottom: 1px solid var(--line);
+}
+.patient-table td { padding: 13px 20px; font-size: 12.5px; color: var(--ink); border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
+.patient-table tr:last-child td { border-bottom: none; }
+.patient-table tr:hover td { background: #F8FAFD; }
+
+.bp-chip { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; font-family: var(--mono); }
+.bp-device { background: var(--pulse-lt); color: var(--pulse-dk); }
+
+/* ── Metric bars ── */
+.metric-row { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--line-soft); }
+.metric-row:last-child { border-bottom: none; }
+.metric-name { font-size: 12px; font-weight: 500; color: var(--ink); width: 130px; flex-shrink: 0; }
+.metric-bar-wrap { flex: 1; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.metric-bar { height: 100%; border-radius: 3px; transition: width 1s var(--ease); }
+.metric-val { font-family: var(--mono); font-size: 11px; color: var(--slate); width: 50px; text-align: right; flex-shrink: 0; }
+
+/* ── Implant log ── */
+.implant-entry { display: flex; align-items: flex-start; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line-soft); transition: background .12s; }
+.implant-entry:hover { background: #FAFBFD; }
+.implant-entry:last-child { border-bottom: none; }
+.implant-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; background: var(--vital-purple-lt); }
+.implant-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.implant-meta { font-size: 11px; color: var(--slate); margin-top: 2px; }
+.implant-status { margin-left: auto; flex-shrink: 0; }
+
+@media (max-width: 1100px) {
+  .stat-row { grid-template-columns: repeat(2,1fr); }
+}

@@ -1,0 +1,6 @@
+Trained model artifacts (xgboost_model.pkl, isolation_forest_model.pkl,
+scaler.pkl, feature_names.pkl) and evaluation plots (cm_*.png, shap_*.png)
+will be written here after running:
+
+    cd ml/
+    python safenet_model.py

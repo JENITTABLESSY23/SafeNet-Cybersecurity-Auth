@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeNet — Cardiology</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
+    <script src="js/darkmode.js"></script>
+    <link rel="stylesheet" href="css/dashboard-common.css">
+    <link rel="stylesheet" href="css/dashboard-cardio.css">
+</head>
+<body class="app-body">
+
+<aside>
+    <div class="sidebar-brand">
+        <div class="logo-icon">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                <path d="M10 3v14M3 10h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="sidebar-brand-text">
+            <span>SafeNet</span>
+            <sub>Cardiology</sub>
+        </div>
+    </div>
+
+    <div style="padding: 0 8px; margin-bottom: 8px;">
+        <div class="sidebar-user-name" id="sidebarUserName">—</div>
+        <span class="role-chip-sidebar" id="sidebarUserRole">—</span>
+    </div>
+
+    <span class="nav-section-label">Workspace</span>
+    <a class="nav-item active" href="#" data-view="diagnostics" onclick="return switchView(this);">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 8.5C2 5.5 4.5 3 8 3s6 2.5 6 5.5-2.5 5.5-6 5.5S2 11.5 2 8.5z" stroke="currentColor" stroke-width="1.4"/><path d="M5 8h6M8 5.5v5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Diagnostics &amp; ECG
+    </a>
+    <a class="nav-item" href="#" data-view="implants" onclick="return switchView(this);">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2C5 2 3 4 3 6c0 4 5 8 5 8s5-4 5-8c0-2-2-4-5-4z" stroke="currentColor" stroke-width="1.4"/></svg>
+        Implant Data Logs
+    </a>
+    <a class="nav-item" href="#" data-view="roster" onclick="return switchView(this);">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M1 13c0-2.5 2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M11 7l2 2 2-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Patient Roster
+    </a>
+
+    <div class="sidebar-footer">
+        <a class="nav-item nav-item-muted" href="#" onclick="SafeNetAPI.logout(); return false;">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3M10 11l3-3-3-3M5 8h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Sign out
+        </a>
+        <div class="sidebar-status">
+            <span class="status-dot"></span>RBAC verified
+        </div>
+    </div>
+</aside>
+
+<main>
+    <div class="topbar">
+        <div>
+            <h2>Cardiovascular Analytics</h2>
+            <p>Chronic trend indices, pace metrics, and telemetry validation</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+            <span class="badge badge-green"><span class="status-dot" style="width:5px;height:5px;margin-right:3px;"></span>Node secure</span>
+            <span class="badge badge-blue">IF Scan: Active</span>
+            <span class="badge badge-red-lt">🫀 4 patients</span>
+        </div>
+    </div>
+
+    <div class="dash-view active" id="view-diagnostics">
+    <!-- Stats -->
+    <div class="stat-row">
+        <div class="stat-card">
+            <div class="stat-label">Patients assigned</div>
+            <div class="stat-value" id="statPatientsAssigned">4</div>
+            <div class="stat-sub">Active this session</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Avg. heart rate</div>
+            <div class="stat-value" id="avgHR">74 <span style="font-size:13px;color:var(--muted)">BPM</span></div>
+            <div class="stat-sub">Across all monitored beds</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Pacemaker nodes</div>
+            <div class="stat-value" style="color:var(--success);">2</div>
+            <div class="stat-sub">Stable · No alerts</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Anomalies flagged</div>
+            <div class="stat-value" style="color:var(--warn);">1</div>
+            <div class="stat-sub">Sensor drift · Bed-02</div>
+        </div>
+    </div>
+
+    <!-- Patient health-status analytics -->
+    <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header">
+            <div>
+                <div class="panel-title">Patient Health Overview</div>
+                <div class="panel-sub">Live condition breakdown — Cardiology</div>
+            </div>
+        </div>
+        <div class="health-overview-body">
+            <div class="health-skeleton" id="healthSkeleton-cardio">Loading analytics…</div>
+            <div class="health-donut-wrap"><canvas class="health-donut" id="healthDonut-cardio" style="display:none;"></canvas></div>
+            <div class="health-legend" id="healthLegend-cardio"></div>
+            <div class="health-empty" id="healthEmpty-cardio" style="display:none;">No patients currently assigned.</div>
+        </div>
+    </div>
+
+    <!-- ECG + Metrics -->
+    <div class="two-col">
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">Live ECG Strip — Bed 01</div>
+                    <div class="panel-sub">Arthur Pendelton · Chronic Hypertension</div>
+                </div>
+                <span class="badge badge-green">Normal sinus</span>
+            </div>
+            <div class="ecg-container">
+                <div class="ecg-grid"></div>
+                <canvas class="ecg-canvas" id="ecgCanvas"></canvas>
+                <div class="ecg-labels">
+                    <span class="ecg-label-item">25 mm/s</span>
+                    <span class="ecg-label-item">10 mm/mV</span>
+                    <span class="ecg-label-item" id="ecgBPM">74 BPM</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">Chronic Pressure Indices</div>
+                    <div class="panel-sub">7-day rolling average per patient</div>
+                </div>
+            </div>
+            <div>
+                <div class="metric-row">
+                    <span class="metric-name">Arthur Pendelton</span>
+                    <div class="metric-bar-wrap"><div class="metric-bar bar-red" style="width:72%;"></div></div>
+                    <span class="metric-val">135/85</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Beatrice Vance</span>
+                    <div class="metric-bar-wrap"><div class="metric-bar bar-green" style="width:55%;"></div></div>
+                    <span class="metric-val">120/78</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Samuel Iyer</span>
+                    <div class="metric-bar-wrap"><div class="metric-bar bar-amber" style="width:80%;"></div></div>
+                    <span class="metric-val">142/92</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Clara Mendes</span>
+                    <div class="metric-bar-wrap"><div class="metric-bar bar-green" style="width:48%;"></div></div>
+                    <span class="metric-val">115/72</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Patient matrix -->
+    <div class="dash-view" id="view-roster">
+    <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header">
+            <div>
+                <div class="panel-title">Patient Profile Matrix</div>
+                <div class="panel-sub">Current diagnoses, devices, and status</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <span class="badge badge-blue">4 assigned</span>
+                <div class="dl-menu-wrap">
+                    <button class="btn-secondary btn-sm" id="dlBtn-cardio">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0 0l-3-3m3 3l3-3M3 13h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Download Report
+                    </button>
+                    <div class="dl-menu" id="dlMenu-cardio">
+                        <button id="dlCsv-cardio">
+                            <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h6M5 8.5h6M5 11h3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                            Export as CSV
+                        </button>
+                        <button id="dlPdf-cardio">
+                            <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 6V2h6l2 2v10H4v-2" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M1.5 8h9v4h-9z" stroke="currentColor" stroke-width="1.2"/></svg>
+                            Printable report (PDF)
+                        </button>
+                        <div class="dl-menu-note">Cardiology patients only.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="patient-table">
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Diagnosis</th>
+                    <th>Bed</th>
+                    <th>Latest BP</th>
+                    <th>Device</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Arthur Pendelton</strong><br><span style="color:var(--muted);font-size:11px;">M · 58 yrs</span></td>
+                    <td>Chronic Hypertension</td>
+                    <td style="font-family:var(--mono);">01-A</td>
+                    <td><span class="bp-chip bp-high">135/85</span></td>
+                    <td>—</td>
+                    <td><span class="badge badge-red-lt">Monitoring</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Beatrice Vance</strong><br><span style="color:var(--muted);font-size:11px;">F · 64 yrs</span></td>
+                    <td>Arrhythmia</td>
+                    <td style="font-family:var(--mono);">01-B</td>
+                    <td><span class="bp-chip bp-normal">120/78</span></td>
+                    <td>Pacemaker X-7</td>
+                    <td><span class="badge badge-green">Stable</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Samuel Iyer</strong><br><span style="color:var(--muted);font-size:11px;">M · 72 yrs</span></td>
+                    <td>Heart failure (Stage II)</td>
+                    <td style="font-family:var(--mono);">02-A</td>
+                    <td><span class="bp-chip bp-high">142/92</span></td>
+                    <td>ICD Link-3</td>
+                    <td><span class="badge badge-amber">Watch</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Clara Mendes</strong><br><span style="color:var(--muted);font-size:11px;">F · 45 yrs</span></td>
+                    <td>Post-angioplasty</td>
+                    <td style="font-family:var(--mono);">02-B</td>
+                    <td><span class="bp-chip bp-normal">115/72</span></td>
+                    <td>—</td>
+                    <td><span class="badge badge-green">Stable</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <!-- Implant logs -->
+    <div class="dash-view" id="view-implants">
+    <div class="panel">
+        <div class="panel-header">
+            <div>
+                <div class="panel-title">Implant Device Telemetry</div>
+                <div class="panel-sub">Last received data packets from active cardiac devices</div>
+            </div>
+        </div>
+
+        <div class="implant-entry">
+            <div class="implant-icon">🔋</div>
+            <div>
+                <div class="implant-name">Pacemaker X-7 · Beatrice Vance</div>
+                <div class="implant-meta">Pacing rate: 68 BPM · Battery: 87% · Last sync: 4 min ago</div>
+            </div>
+            <div class="implant-status"><span class="badge badge-green">Pacing stable</span></div>
+        </div>
+
+        <div class="implant-entry">
+            <div class="implant-icon">⚡</div>
+            <div>
+                <div class="implant-name">ICD Link-3 · Samuel Iyer</div>
+                <div class="implant-meta">Shock threshold: 35J · Detection: On · Last sync: 12 min ago</div>
+            </div>
+            <div class="implant-status"><span class="badge badge-amber">Threshold review</span></div>
+        </div>
+    </div>
+    </div>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/patient-report.js"></script>
+<script src="js/patient-analytics.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/notification.js"></script>
+<script src="js/search.js"></script>
+<script src="js/global-toolbar.js"></script>
+<script src="js/ai.js"></script>
+<script>
+    let currentUser = SafeNetAPI.requireAuth();
+    if (currentUser) {
+        document.getElementById('sidebarUserName').textContent = currentUser.fullName || currentUser.username;
+        document.getElementById('sidebarUserRole').textContent = currentUser.role;
+    }
+
+    // Sidebar workspace tabs: show only the view matching the clicked nav item.
+    function switchView(navEl) {
+        document.querySelectorAll('.nav-item[data-view]').forEach(el => el.classList.remove('active'));
+        navEl.classList.add('active');
+        document.querySelectorAll('.dash-view').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById('view-' + navEl.dataset.view);
+        if (target) target.classList.add('active');
+        return false;
+    }
+
+    // ECG canvas animation
+    const canvas = document.getElementById('ecgCanvas');
+    const ctx = canvas.getContext('2d');
+    let offset = 0;
+
+    function resize() {
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // ECG waveform points (one beat, normalized 0-1 height)
+    const beat = [
+        [0,0.5],[0.1,0.5],[0.15,0.48],[0.2,0.52],[0.25,0.5],  // P wave
+        [0.3,0.5],[0.33,0.2],[0.35,0.9],[0.37,0.1],[0.4,0.5],  // QRS
+        [0.5,0.5],[0.6,0.42],[0.7,0.5],[0.8,0.5],              // T wave
+        [1,0.5]
+    ];
+
+    function ecgY(x) {
+        // x is 0-1 within one beat cycle
+        const bx = ((x % 1) + 1) % 1;
+        let prev = beat[0], next = beat[beat.length-1];
+        for (let i = 0; i < beat.length-1; i++) {
+            if (bx >= beat[i][0] && bx <= beat[i+1][0]) {
+                prev = beat[i]; next = beat[i+1]; break;
+            }
+        }
+        const t = (bx - prev[0]) / (next[0] - prev[0] || 1);
+        return prev[1] + (next[1] - prev[1]) * t;
+    }
+
+    let bpm = 74;
+    function drawECG() {
+        const W = canvas.width, H = canvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        const beatLen = W * 0.38 * (72 / bpm);
+        ctx.beginPath();
+        ctx.strokeStyle = '#00E676';
+        ctx.lineWidth = 1.8;
+        ctx.shadowColor = '#00E676';
+        ctx.shadowBlur = 6;
+
+        for (let px = 0; px < W; px++) {
+            const x = (px + offset) / beatLen;
+            const y = ecgY(x) * H;
+            px === 0 ? ctx.moveTo(px, y) : ctx.lineTo(px, y);
+        }
+        ctx.stroke();
+
+        // Scan line
+        const scanX = W - (offset % beatLen);
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(0,230,118,0.15)';
+        ctx.lineWidth = 12;
+        ctx.moveTo(scanX, 0);
+        ctx.lineTo(scanX, H);
+        ctx.stroke();
+
+        offset = (offset + 1.2) % (beatLen * 4);
+        requestAnimationFrame(drawECG);
+    }
+
+    drawECG();
+
+    // Live BPM — polls the real backend instead of Math.random()
+    async function pollBedVitals() {
+        try {
+            const v = await SafeNetAPI.get('/iot/vitals/01-A');
+            bpm = v.heartRate;
+            document.getElementById('ecgBPM').textContent = bpm + ' BPM';
+            document.getElementById('avgHR').innerHTML = bpm + ' <span style="font-size:13px;color:var(--muted)">BPM</span>';
+        } catch (err) {
+            console.error('Vitals fetch failed:', err.message);
+        }
+    }
+    pollBedVitals();
+    setInterval(pollBedVitals, 3500);
+
+    PatientReport.wireDownloadMenu({
+        buttonId: 'dlBtn-cardio', menuId: 'dlMenu-cardio',
+        csvBtnId: 'dlCsv-cardio', pdfBtnId: 'dlPdf-cardio',
+        // GET /patients is department-scoped server-side, so this always
+        // resolves to Cardiology patients only for a Cardiology account —
+        // fetched fresh each click rather than cached, since the roster
+        // table above is static demo markup, not backed by a live array.
+        getPatients: () => SafeNetAPI.get('/patients'),
+        label: 'cardiology',
+        reportMeta: {
+            title: 'Cardiology Patient Report',
+            subtitle: 'Cardiovascular Analytics — Patient Profile Matrix',
+            generatedBy: currentUser ? (currentUser.fullName || currentUser.username) : undefined,
+        }
+    });
+
+    PatientAnalytics.render({
+        canvas: 'healthDonut-cardio', legend: 'healthLegend-cardio',
+        empty: 'healthEmpty-cardio', skeleton: 'healthSkeleton-cardio',
+        assignedLabel: 'statPatientsAssigned',
+    });
+</script>
+</body>
+</html>

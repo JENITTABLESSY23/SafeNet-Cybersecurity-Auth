@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeNet — Signed Out</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
+    <script src="js/darkmode.js"></script>
+</head>
+<body class="auth-body">
+<canvas class="auth-trace" data-color="#1a3a5c"></canvas>
+<div class="card">
+    <div class="wordmark">
+        <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 3v14M3 10h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h1>SafeNet</h1>
+    </div>
+
+    <div class="lock-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect x="5" y="12" width="18" height="13" rx="2.5" stroke="var(--muted)" stroke-width="1.8"/>
+            <path d="M9 12V9a5 5 0 0110 0v3" stroke="var(--muted)" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="14" cy="18.5" r="2" fill="var(--muted)"/>
+        </svg>
+    </div>
+
+    <h2>You've been signed out</h2>
+    <p>Your session has ended and your credentials have been cleared. All unsaved changes were discarded.</p>
+
+    <div class="session-info">
+        <div class="session-row">
+            <span class="session-key">Session ended</span>
+            <span class="session-val" id="logoutTime">—</span>
+        </div>
+        <div class="session-row">
+            <span class="session-key">Duration</span>
+            <span class="session-val" id="sessionDuration">—</span>
+        </div>
+        <div class="session-row">
+            <span class="session-key">Hospital ID</span>
+            <span class="session-val" id="hospitalIdVal">—</span>
+        </div>
+        <div class="session-row">
+            <span class="session-key">Server sign-out</span>
+            <span class="session-val" id="signoutStatus">Processing…</span>
+        </div>
+    </div>
+
+    <a href="login.html" class="btn-login rippleable">Sign back in</a>
+
+    <p style="font-size:12px;color:var(--muted);margin-bottom:0;">
+        Redirecting to login in <span class="countdown" id="countdown">10</span>s…
+    </p>
+
+    <div class="security-badge">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L1.5 3v3c0 2.5 2 4.5 4.5 5 2.5-.5 4.5-2.5 4.5-5V3L6 1z" stroke="currentColor" stroke-width="1.2"/></svg>
+        Session tokens invalidated
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/notification.js"></script>
+<script src="js/search.js"></script>
+<script src="js/global-toolbar.js"></script>
+<script src="js/ai.js"></script>
+<script>
+    // Capture what we need to display before the session is cleared.
+    const user = SafeNetAPI.getUser();
+    const loginTime = sessionStorage.getItem('sn_login_time');
+
+    document.getElementById('hospitalIdVal').textContent = user ? user.hospitalId : '—';
+
+    if (loginTime) {
+        const mins = Math.max(1, Math.round((Date.now() - Number(loginTime)) / 60000));
+        const h = Math.floor(mins / 60), m = mins % 60;
+        document.getElementById('sessionDuration').textContent = h > 0 ? `${h}h ${m}m` : `${m}m`;
+    } else {
+        document.getElementById('sessionDuration').textContent = 'Unknown';
+    }
+
+    const now = new Date();
+    document.getElementById('logoutTime').textContent = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+
+    // Actually invalidate the session (server-side token blacklist + local clear).
+    SafeNetAPI.finishLogout().then((serverConfirmed) => {
+        if (serverConfirmed) {
+            document.getElementById('signoutStatus').textContent = '✓ Confirmed';
+            document.getElementById('signoutStatus').style.color = 'var(--success)';
+        } else {
+            document.getElementById('signoutStatus').textContent = '⚠ Cleared locally only';
+            document.getElementById('signoutStatus').style.color = 'var(--warn)';
+        }
+    });
+
+    // Countdown redirect
+    let secs = 10;
+    const cd = document.getElementById('countdown');
+    const timer = setInterval(() => {
+        secs--;
+        cd.textContent = secs;
+        if (secs <= 0) { clearInterval(timer); window.location.href = 'login.html'; }
+    }, 1000);
+</script>
+</body>
+</html>

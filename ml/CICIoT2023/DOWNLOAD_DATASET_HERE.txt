@@ -1,0 +1,18 @@
+DOWNLOAD CICIoT2023 DATASET HERE
+=================================
+
+1. Go to: https://www.unb.ca/cic/datasets/iotdataset-2023.html
+2. Click "Download Dataset"
+3. Fill the short form
+4. Download all CSV files
+5. Extract and paste ALL .csv files into this folder (CICIoT2023/)
+
+The dataset contains:
+- 105 IoT devices
+- 33 attack types
+- 7 attack categories
+- ~46 features per record
+
+After placing CSV files here, run:
+  cd ml/
+  python safenet_model.py

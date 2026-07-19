@@ -1,0 +1,71 @@
+/* SafeNet — shared dashboard components (extends design-system.css) */
+
+.topbar h2 { font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+.topbar p { font-size: 13px; color: var(--slate); margin-top: 2px; }
+
+.badge { font-family: var(--mono); border-radius: 6px; padding: 5px 11px; }
+
+/* ── Vitals grid ── */
+.vitals-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+.vital-card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 13px; padding: 20px;
+  position: relative; overflow: hidden; transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+.vital-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.vital-card.alert-state { border-color: #F4C3CC; background: linear-gradient(180deg, #FFF7F8 0%, #fff 100%); animation: softPulseGlow 2.4s ease-in-out infinite; }
+.vital-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; color: var(--slate); margin-bottom: 10px; }
+.vital-value { font-family: var(--mono); font-size: 36px; font-weight: 500; letter-spacing: -1px; line-height: 1; color: var(--ink); }
+.vital-unit { font-size: 13px; font-weight: 400; color: var(--slate); margin-left: 2px; }
+.vital-bar-wrap { margin-top: 14px; height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.vital-bar { height: 100%; border-radius: 3px; transition: width 1s var(--ease); }
+.vital-sub { font-size: 11px; color: var(--slate); margin-top: 8px; }
+.vital-badge { position: absolute; top: 14px; right: 14px; }
+
+/* ── Orders / medication queue ── */
+.order-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line-soft); transition: background 0.12s; }
+.order-row:last-child { border-bottom: none; }
+.order-row:hover { background: #F8FAFD; }
+.order-priority { width: 4px; height: 40px; border-radius: 2px; flex-shrink: 0; margin-top: 2px; }
+.prio-stat { background: var(--vital-red); }
+.prio-high { background: var(--vital-amber); }
+.prio-med  { background: var(--vital-green); }
+.order-info { flex: 1; }
+.order-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.order-meta { font-size: 11px; color: var(--slate); margin-top: 2px; }
+.order-actions { display: flex; gap: 6px; flex-shrink: 0; margin-top: 2px; }
+.btn-confirm { background: linear-gradient(135deg, var(--pulse) 0%, var(--pulse-dk) 100%); color: white; }
+.btn-hold { background: var(--cloud); color: var(--slate); border: 1px solid var(--line); }
+
+/* ── Patient summary cards ── */
+.patient-card { padding: 15px 20px; border-bottom: 1px solid var(--line-soft); transition: background .12s; }
+.patient-card:hover { background: #FAFBFD; }
+.patient-card:last-child { border-bottom: none; }
+.patient-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.patient-card-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.patient-card-meta { font-size: 11px; color: var(--slate); margin-top: 1px; }
+.mini-vitals { display: flex; gap: 10px; flex-wrap: wrap; }
+.mini-vital { display: flex; flex-direction: column; background: var(--cloud); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; transition: transform .12s; }
+.mini-vital-val { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--ink); }
+.mini-vital-key { font-size: 9px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 1px; }
+
+/* ── Break-the-glass / confirm modal (JS toggles .open) ── */
+.modal-overlay.open { display: flex; }
+.modal-icon { width: 48px; height: 48px; border-radius: 13px; background: var(--vital-red-lt); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.modal h3 { font-family: var(--display); font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.modal p { font-size: 13px; color: var(--slate); line-height: 1.6; margin-bottom: 20px; }
+.modal-reason { width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 9px; font-family: var(--sans); font-size: 13px; color: var(--ink); outline: none; resize: none; margin-bottom: 16px; }
+.modal-reason:focus { border-color: var(--vital-red); box-shadow: 0 0 0 3px var(--vital-red-lt); }
+.audit-note { font-size: 11px; color: var(--slate-lt); margin-top: 10px; text-align: center; }
+
+/* ── Priority / vitals badges (gynecology order variant) ── */
+.order-priority.prio-high { background: var(--vital-amber); }
+
+@media (max-width: 1100px) {
+  .vitals-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 768px) {
+  aside { display: none; }
+  main { padding: 64px 16px 20px; }
+  .vitals-grid { grid-template-columns: 1fr; }
+}

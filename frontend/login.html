@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeNet — Secure Clinical Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
+    <script src="js/darkmode.js"></script>
+</head>
+<body class="auth-body">
+
+    <canvas class="auth-trace" data-color="#1a3a5c"></canvas>
+
+    <div class="auth-wrap">
+
+        <!-- Dark brand side -->
+        <div class="auth-side">
+            <div class="auth-side-content">
+                <div class="eyebrow">
+                    <span class="pulse-dot"></span> Next-generation hospital security
+                </div>
+                <div class="wordmark">
+                    <div class="logo-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 3v14M3 10h14" stroke="#071224" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h1>SafeNet</h1>
+                </div>
+                <p class="tagline">Clinical Access Control &amp; Authentication System</p>
+                <h2 style="margin-top:28px;">Protecting every patient, every record, every second.</h2>
+                <p class="lede">Secure authentication, role-based access and encrypted communication for hospitals and healthcare institutions.</p>
+            </div>
+
+            <div class="auth-side-trace">
+                <canvas class="pulse-trace" data-color="#55D9C9" style="width:100%; height:100%;"></canvas>
+            </div>
+
+            <div class="auth-stat-row">
+                <div><b>256-bit</b><span>AES encryption</span></div>
+                <div><b>99.99%</b><span>Uptime SLA</span></div>
+                <div><b>ISO 27001</b><span>Certified</span></div>
+            </div>
+        </div>
+
+        <!-- Form side -->
+        <div class="auth-form-side">
+
+            <div class="header">
+                <h1 class="display" style="font-size:24px; font-weight:600; margin-bottom:4px;">Welcome back</h1>
+                <p class="tagline" style="margin-left:0;">Sign in to continue to your dashboard</p>
+            </div>
+
+            <div class="status-bar" role="status">
+                <span class="pulse-dot"></span>
+                All systems operational
+            </div>
+
+            <form id="loginForm" novalidate>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrap">
+                        <span class="input-icon" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M2 13.5C2 11 4.5 9 8 9s6 2 6 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <input type="text" id="username" name="username" autocomplete="username"
+                               placeholder="e.g. dr.sharma" required>
+                    </div>
+                    <span class="field-error" id="err-username">Enter your username.</span>
+                </div>
+
+                <!-- Hospital ID -->
+                <div class="form-group">
+                    <label for="hospital-id">Hospital ID</label>
+                    <div class="input-wrap">
+                        <span class="input-icon" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <input type="text" id="hospital-id" name="hospitalId" class="id-input"
+                               placeholder="SN-XXXX-000" autocomplete="off" required maxlength="11">
+                    </div>
+                    <span class="field-error" id="err-hospital-id">Format must be SN-XXXX-000.</span>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                        <label for="password">Password</label>
+                        <a href="forgot-password.html" style="font-size:12.5px; color:var(--pulse); text-decoration:none; font-weight:500;">Forgot password?</a>
+                    </div>
+                    <div class="input-wrap pw-wrap">
+                        <span class="input-icon" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7V5a3 3 0 116 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <input type="password" id="password" name="password" autocomplete="current-password"
+                               placeholder="••••••••" required>
+                        <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
+                            <svg id="eyeIcon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M1 8C2.5 4.5 5 3 8 3s5.5 1.5 7 5c-1.5 3.5-4 5-7 5S2.5 11.5 1 8z" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <span class="field-error" id="err-password">Password must be at least 6 characters.</span>
+                </div>
+
+                <!-- Error / info messages -->
+                <div class="alert-msg" id="alertMsg" role="alert"></div>
+                <div class="info-msg" id="infoMsg" role="status"></div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn-login rippleable">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M2 8h12M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Access Dashboard
+                </button>
+
+            </form>
+
+            <!-- Footer -->
+            <div class="card-footer">
+                <p>New staff member? <a href="register.html">Register here</a></p>
+                <div class="security-badge" aria-label="Security information">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M6 1L1.5 3v3c0 2.5 2 4.5 4.5 5 2.5-.5 4.5-2.5 4.5-5V3L6 1z" stroke="currentColor" stroke-width="1.2"/>
+                    </svg>
+                    HIPAA compliant · AES-256 encrypted · ISO 27001 certified
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/notification.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/global-toolbar.js"></script>
+    <script src="js/ai.js"></script>
+    <script>
+        // Password visibility toggle
+        const pwToggle = document.getElementById('pwToggle');
+        const pwInput = document.getElementById('password');
+        pwToggle.addEventListener('click', () => {
+            const isText = pwInput.type === 'text';
+            pwInput.type = isText ? 'password' : 'text';
+            pwToggle.setAttribute('aria-label', isText ? 'Show password' : 'Hide password');
+        });
+
+        // Hospital ID auto-format: SN-XXXX-000 (2-letter dept + 2-letter initials, then a 3-digit number)
+        const idInput = document.getElementById('hospital-id');
+        idInput.addEventListener('input', () => {
+            let raw = idInput.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            let formatted = raw;
+            if (raw.length > 2) formatted = raw.slice(0,2) + '-' + raw.slice(2);
+            if (raw.length > 6) formatted = raw.slice(0,2) + '-' + raw.slice(2,6) + '-' + raw.slice(6,9);
+            idInput.value = formatted;
+        });
+
+        // ── Field validators ──
+        // Username: letters, digits, dots, underscores — no spaces or symbols.
+        const USERNAME_RE = /^[a-zA-Z][a-zA-Z0-9._]{2,29}$/;
+        // Hospital ID as produced by the auto-formatter above: XX-XXXX-XXXX
+        const HOSPITAL_ID_RE = /^[A-Z]{2}-[A-Z0-9]{4}-[0-9]{3}$/;
+
+        function setFieldError(inputEl, errEl, message) {
+            if (message) {
+                inputEl.classList.add('input-invalid');
+                errEl.textContent = message;
+                errEl.classList.add('show');
+            } else {
+                inputEl.classList.remove('input-invalid');
+                errEl.classList.remove('show');
+            }
+        }
+
+        function validateUsername() {
+            const el = document.getElementById('username');
+            const err = document.getElementById('err-username');
+            const v = el.value.trim();
+            if (!v) { setFieldError(el, err, 'Enter your username.'); return false; }
+            if (!USERNAME_RE.test(v)) {
+                setFieldError(el, err, 'Use letters, numbers, dots or underscores only (e.g. dr.sharma).');
+                return false;
+            }
+            setFieldError(el, err, null);
+            return true;
+        }
+
+        function validateHospitalId() {
+            const el = document.getElementById('hospital-id');
+            const err = document.getElementById('err-hospital-id');
+            const v = el.value.trim();
+            if (!v) { setFieldError(el, err, 'Enter your Hospital ID.'); return false; }
+            if (!HOSPITAL_ID_RE.test(v)) {
+                setFieldError(el, err, 'Format must be SN-XXXX-000.');
+                return false;
+            }
+            setFieldError(el, err, null);
+            return true;
+        }
+
+        function validatePassword() {
+            const el = document.getElementById('password');
+            const err = document.getElementById('err-password');
+            const v = el.value;
+            if (!v) { setFieldError(el, err, 'Enter your password.'); return false; }
+            if (v.length < 6) {
+                setFieldError(el, err, 'Password must be at least 6 characters.');
+                return false;
+            }
+            setFieldError(el, err, null);
+            return true;
+        }
+
+        document.getElementById('username').addEventListener('blur', validateUsername);
+        document.getElementById('hospital-id').addEventListener('blur', validateHospitalId);
+        document.getElementById('password').addEventListener('blur', validatePassword);
+
+        // Form submit
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const alertEl = document.getElementById('alertMsg');
+            const infoEl = document.getElementById('infoMsg');
+            alertEl.style.display = 'none';
+            infoEl.style.display = 'none';
+
+            const usernameOk = validateUsername();
+            const hospitalIdOk = validateHospitalId();
+            const passwordOk = validatePassword();
+
+            if (!usernameOk || !hospitalIdOk || !passwordOk) {
+                alertEl.textContent = 'Please correct the highlighted fields before continuing.';
+                alertEl.style.display = 'block';
+                return;
+            }
+
+            const username = document.getElementById('username').value.trim();
+            const hospitalId = document.getElementById('hospital-id').value.trim();
+            const password = document.getElementById('password').value;
+
+            const submitBtn = document.querySelector('.btn-login');
+            const originalLabel = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in…';
+
+            try {
+                const data = await SafeNetAPI.login(username, hospitalId, password);
+                window.location.href = SafeNetAPI.dashboardFor(data.department);
+            } catch (err) {
+                alertEl.textContent = err.message;
+                alertEl.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalLabel;
+            }
+        });
+
+        // Surface the reason for a forced redirect back to login (e.g. expired session)
+        if (new URLSearchParams(window.location.search).get('expired')) {
+            const alertEl = document.getElementById('alertMsg');
+            alertEl.textContent = 'Your session expired. Please sign in again.';
+            alertEl.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

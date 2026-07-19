@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeNet — Staff Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
+    <script src="js/darkmode.js"></script>
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body class="auth-body reg-body">
+<canvas class="auth-trace" data-color="#1a3a5c"></canvas>
+
+<div class="card reg-card">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="wordmark">
+            <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 3v14M3 10h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h1>SafeNet</h1>
+        </div>
+        <p class="tagline">Staff Credential Registration</p>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="steps" id="stepBar">
+        <div class="step active" data-step="1">
+            <div class="step-dot">1</div>
+            <span class="step-label">Identity</span>
+        </div>
+        <div class="step" data-step="2">
+            <div class="step-dot">2</div>
+            <span class="step-label">Department</span>
+        </div>
+        <div class="step" data-step="3">
+            <div class="step-dot">3</div>
+            <span class="step-label">Verify</span>
+        </div>
+        <div class="step" data-step="4">
+            <div class="step-dot">4</div>
+            <span class="step-label">Review</span>
+        </div>
+    </div>
+
+    <div class="alert-msg" id="alertMsg" role="alert"></div>
+
+    <!-- Step 1: Identity -->
+    <div class="form-section active" id="step1">
+        <div class="section-title">Your identity</div>
+        <p class="section-sub">Enter your professional details as they appear on your hospital records.</p>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="field-label" for="firstName">First name</label>
+                <div class="input-wrap">
+                    <span class="input-icon">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 13.5C2 11 4.5 9 8 9s6 2 6 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </span>
+                    <input type="text" id="firstName" placeholder="Jane" autocomplete="given-name">
+                </div>
+                <span class="field-error" id="err-firstName">Letters only, 2-50 characters.</span>
+            </div>
+            <div class="form-group">
+                <label class="field-label" for="lastName">Last name</label>
+                <div class="input-wrap">
+                    <span class="input-icon">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 13.5C2 11 4.5 9 8 9s6 2 6 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </span>
+                    <input type="text" id="lastName" placeholder="Doe" autocomplete="family-name">
+                </div>
+                <span class="field-error" id="err-lastName">Letters only, 2-50 characters.</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="field-label" for="email">Work email</label>
+            <div class="input-wrap">
+                <span class="input-icon">
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 5l6 4 6-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <input type="email" id="email" placeholder="j.doe@hospital.com" autocomplete="email">
+            </div>
+            <span class="field-error" id="err-email">Enter a valid email address.</span>
+        </div>
+
+        <div class="form-group">
+            <label class="field-label" for="phone">Phone number</label>
+            <div class="input-wrap">
+                <span class="input-icon">
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="4" y="1" width="8" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="12" r="0.8" fill="currentColor"/></svg>
+                </span>
+                <input type="tel" id="phone" placeholder="+91 98765 43210" autocomplete="tel">
+            </div>
+            <span class="field-error" id="err-phone">Enter a valid 10-digit phone number.</span>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="goStep(2)">
+                Continue
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Step 2: Department -->
+    <div class="form-section" id="step2">
+        <div class="section-title">Your department</div>
+        <p class="section-sub">Select the department you're joining. This sets your access level.</p>
+
+        <div class="form-group">
+            <label class="field-label">Department</label>
+            <div class="dept-pills" role="radiogroup">
+                <label class="dept-pill" id="pill-icu">
+                    <input type="radio" name="dept" value="icu">
+                    <span class="dept-pill-icon">🫁</span>
+                    <span class="dept-name">ICU</span>
+                    <span class="dept-desc">Critical Care</span>
+                </label>
+                <label class="dept-pill" id="pill-cardiology">
+                    <input type="radio" name="dept" value="cardiology">
+                    <span class="dept-pill-icon">🫀</span>
+                    <span class="dept-name">Cardiology</span>
+                    <span class="dept-desc">Cardiac &amp; Vascular</span>
+                </label>
+                <label class="dept-pill" id="pill-gynecology">
+                    <input type="radio" name="dept" value="gynecology">
+                    <span class="dept-pill-icon">🏥</span>
+                    <span class="dept-name">Gynecology</span>
+                    <span class="dept-desc">Women's Health</span>
+                </label>
+                <label class="dept-pill" id="pill-admin">
+                    <input type="radio" name="dept" value="admin">
+                    <span class="dept-pill-icon">📋</span>
+                    <span class="dept-name">Admin</span>
+                    <span class="dept-desc">Administration</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="field-label" for="role">Role / designation</label>
+            <div class="select-wrap">
+                <select id="role" style="padding-left:14px;">
+                    <option value="" disabled selected>Select your role</option>
+                    <option>Consultant Physician</option>
+                    <option>Resident Doctor</option>
+                    <option>Senior Nurse</option>
+                    <option>Nurse Practitioner</option>
+                    <option>Clinical Technician</option>
+                    <option>Administrative Officer</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-secondary" onclick="goStep(1)">Back</button>
+            <button class="btn btn-primary" onclick="goStep(3)">
+                Continue
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Step 3: Upload -->
+    <div class="form-section" id="step3">
+        <div class="section-title">Hospital ID proof</div>
+        <p class="section-sub">Upload a scan of your hospital-issued ID card for verification.</p>
+
+        <div class="notice">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#D97706" stroke-width="1.5"/><path d="M8 5v3.5M8 11v.5" stroke="#D97706" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>Your document is stored securely and reviewed only by the Admin team. Approval typically takes 1–2 business days.</span>
+        </div>
+
+        <div class="form-group">
+            <label class="field-label">ID Document</label>
+            <div class="upload-zone" id="dropZone">
+                <input type="file" id="fileInput" name="hosIdProof" accept=".pdf,.png,.jpg,.jpeg">
+                <div class="upload-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 13V4M10 4L7 7M10 4l3 3" stroke="#0055FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 14v2a1 1 0 001 1h12a1 1 0 001-1v-2" stroke="#0055FF" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <span class="upload-label">Choose a file or drag it here</span>
+                <span class="upload-sub">PDF, PNG, or JPG · Max 5 MB</span>
+                <div class="upload-chosen" id="chosenFile" style="display:none">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#0D9373" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span id="chosenFileName"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="field-label" for="notes">Additional notes <span style="text-transform:none;font-weight:400;color:var(--slate-lt)">(optional)</span></label>
+            <textarea id="notes" rows="3" class="no-icon" placeholder="Any context for the admin team, e.g. transfer from another branch…"></textarea>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-secondary" onclick="goStep(2)">Back</button>
+            <button class="btn btn-primary" onclick="goStep(4)">
+                Review application
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Step 4: Review -->
+    <div class="form-section" id="step4">
+        <div class="section-title">Review your application</div>
+        <p class="section-sub">Check your details before submitting. The admin team will verify and activate your account.</p>
+
+        <div class="review-table" id="reviewTable">
+            <!-- populated by JS -->
+        </div>
+
+        <div class="btn-row" style="margin-top: 18px;">
+            <button class="btn btn-secondary" onclick="goStep(3)">Edit</button>
+            <button class="btn btn-success" onclick="submitForm()">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Submit application
+            </button>
+        </div>
+    </div>
+
+    <!-- Success screen -->
+    <div class="success-screen" id="successScreen">
+        <div class="success-icon">
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><path d="M5 15l7 7L25 8" stroke="#0D9373" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2>Application submitted</h2>
+        <p>Your registration is pending admin review. You'll receive an email at <strong id="reviewEmail"></strong> once your account is activated — typically within 1–2 business days.</p>
+        <p id="hospitalIdNote" style="display:none; font-family: var(--mono); font-size: 13px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 20px;"></p>
+        <a href="login.html" class="btn btn-primary" style="max-width:240px; margin: 0 auto; text-decoration:none;">Back to login</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer" id="cardFooter">
+        Already have an account? <a href="login.html">Sign in</a>
+    </div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/notification.js"></script>
+<script src="js/search.js"></script>
+<script src="js/global-toolbar.js"></script>
+<script src="js/ai.js"></script>
+<script>
+    let currentStep = 1;
+
+    // ── Field validators ──
+    const NAME_RE  = /^[A-Za-z][A-Za-z '-]{1,49}$/;
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+    // Accepts an optional +91 country code, then exactly 10 digits starting 6-9
+    // (standard Indian mobile format), ignoring spaces/hyphens the user types.
+    const PHONE_RE = /^(\+91)?[6-9]\d{9}$/;
+
+    function setFieldError(inputEl, errEl, message) {
+        if (message) {
+            inputEl.classList.add('input-invalid');
+            errEl.textContent = message;
+            errEl.classList.add('show');
+        } else {
+            inputEl.classList.remove('input-invalid');
+            errEl.classList.remove('show');
+        }
+    }
+
+    function validateName(id) {
+        const el = document.getElementById(id);
+        const err = document.getElementById('err-' + id);
+        const v = el.value.trim();
+        if (!v) { setFieldError(el, err, 'This field is required.'); return false; }
+        if (!NAME_RE.test(v)) {
+            setFieldError(el, err, 'Letters only (no numbers or symbols), 2-50 characters.');
+            return false;
+        }
+        setFieldError(el, err, null);
+        return true;
+    }
+
+    function validateEmail() {
+        const el = document.getElementById('email');
+        const err = document.getElementById('err-email');
+        const v = el.value.trim();
+        if (!v) { setFieldError(el, err, 'This field is required.'); return false; }
+        if (!EMAIL_RE.test(v)) {
+            setFieldError(el, err, 'Enter a valid email address, e.g. j.doe@hospital.com.');
+            return false;
+        }
+        setFieldError(el, err, null);
+        return true;
+    }
+
+    function validatePhone() {
+        const el = document.getElementById('phone');
+        const err = document.getElementById('err-phone');
+        const digitsOnly = el.value.replace(/[\s-]/g, '');
+        if (!digitsOnly) { setFieldError(el, err, 'This field is required.'); return false; }
+        if (!PHONE_RE.test(digitsOnly)) {
+            setFieldError(el, err, 'Enter a valid 10-digit Indian mobile number.');
+            return false;
+        }
+        setFieldError(el, err, null);
+        return true;
+    }
+
+    ['firstName', 'lastName'].forEach(id =>
+        document.getElementById(id).addEventListener('blur', () => validateName(id))
+    );
+    document.getElementById('email').addEventListener('blur', validateEmail);
+    document.getElementById('phone').addEventListener('blur', validatePhone);
+
+    // Dept pill selection
+    document.querySelectorAll('.dept-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            document.querySelectorAll('.dept-pill').forEach(p => p.classList.remove('selected'));
+            pill.classList.add('selected');
+        });
+    });
+
+    // File upload
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const chosenFile = document.getElementById('chosenFile');
+    const chosenFileName = document.getElementById('chosenFileName');
+
+    fileInput.addEventListener('change', () => {
+        const f = fileInput.files[0];
+        if (f) { chosenFileName.textContent = f.name; chosenFile.style.display = 'flex'; }
+    });
+
+    // The whole box is styled to look clickable (cursor:pointer, hover state),
+    // so the click target needs to cover the whole zone, not just the label text.
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const f = e.dataTransfer.files[0];
+        if (f) { fileInput.files = e.dataTransfer.files; chosenFileName.textContent = f.name; chosenFile.style.display = 'flex'; }
+    });
+
+    function showAlert(msg) {
+        const el = document.getElementById('alertMsg');
+        el.textContent = msg;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 4000);
+    }
+
+    function goStep(n) {
+        // Validate before advancing
+        if (n > currentStep) {
+            if (currentStep === 1) {
+                const fnOk = validateName('firstName');
+                const lnOk = validateName('lastName');
+                const emOk = validateEmail();
+                const phOk = validatePhone();
+                if (!fnOk || !lnOk || !emOk || !phOk) {
+                    showAlert('Please correct the highlighted fields before continuing.');
+                    return;
+                }
+            }
+            if (currentStep === 2) {
+                const dept = document.querySelector('input[name="dept"]:checked');
+                const role = document.getElementById('role').value;
+                if (!dept) { showAlert('Select your department.'); return; }
+                if (!role) { showAlert('Select your role.'); return; }
+            }
+            if (currentStep === 3 && n === 4) {
+                if (!fileInput.files[0]) { showAlert('Upload your hospital ID document.'); return; }
+                buildReview();
+            }
+        }
+
+        // Update steps
+        document.querySelectorAll('.step').forEach(s => {
+            const num = parseInt(s.dataset.step);
+            s.classList.remove('active', 'done');
+            if (num < n) s.classList.add('done');
+            if (num === n) s.classList.add('active');
+            // Checkmark for done
+            if (num < n) s.querySelector('.step-dot').innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+            if (num === n || num > n) s.querySelector('.step-dot').textContent = num;
+        });
+
+        document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + n).classList.add('active');
+        currentStep = n;
+    }
+
+    function buildReview() {
+        const dept = document.querySelector('input[name="dept"]:checked')?.value || '';
+        const deptMap = { icu: 'ICU / Critical Care', cardiology: 'Cardiology', gynecology: 'Gynecology', admin: 'Administration' };
+        const rows = [
+            ['Name', `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`],
+            ['Email', document.getElementById('email').value],
+            ['Phone', document.getElementById('phone').value],
+            ['Department', deptMap[dept] || dept],
+            ['Role', document.getElementById('role').value],
+            ['ID Document', fileInput.files[0]?.name || '—'],
+        ];
+        document.getElementById('reviewTable').innerHTML = rows.map(([k, v]) =>
+            `<div class="review-row"><span class="review-key">${k}</span><span class="review-val">${v}</span></div>`
+        ).join('');
+    }
+
+    async function submitForm() {
+        const dept = document.querySelector('input[name="dept"]:checked')?.value || '';
+        const submitBtn = document.querySelector('#step4 .btn-success');
+        const originalLabel = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+
+        const form = new FormData();
+        form.append('firstName', document.getElementById('firstName').value.trim());
+        form.append('lastName',  document.getElementById('lastName').value.trim());
+        form.append('email',     document.getElementById('email').value.trim());
+        form.append('phone',     document.getElementById('phone').value.trim());
+        form.append('department', dept);
+        form.append('role',      document.getElementById('role').value);
+        if (document.getElementById('notes').value.trim()) {
+            form.append('notes', document.getElementById('notes').value.trim());
+        }
+        if (fileInput.files[0]) {
+            form.append('idProof', fileInput.files[0]);
+        }
+
+        try {
+            const message = await SafeNetAPI.post('/auth/register', form);
+
+            document.getElementById('stepBar').style.display = 'none';
+            document.querySelectorAll('.form-section').forEach(s => s.style.display = 'none');
+            document.getElementById('alertMsg').style.display = 'none';
+            document.getElementById('cardFooter').style.display = 'none';
+            document.getElementById('reviewEmail').textContent = document.getElementById('email').value;
+
+            // message is like "Registration submitted. Your Hospital ID: SN-ICJD-427"
+            const idNote = document.getElementById('hospitalIdNote');
+            idNote.textContent = message;
+            idNote.style.display = 'block';
+
+            document.getElementById('successScreen').style.display = 'block';
+        } catch (err) {
+            showAlert(err.message);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalLabel;
+        }
+    }
+</script>
+</body>
+</html>
