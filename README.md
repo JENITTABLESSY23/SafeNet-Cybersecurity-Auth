@@ -1,4 +1,4 @@
-# 🏥 SafeNet — Clinical Access Control & Authentication System
+# 🏥 SafeNet — A Hybrid XGBoost And Isolation Forest-Based IoT Anomaly Detection System For Clinical Access Control In Hospital Environments
 
 > **VSB Engineering College, Karur — 2028 Batch**
 > 3rd Year · Project Implementation Phase
