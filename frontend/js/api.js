@@ -20,7 +20,7 @@
 //
 // >>> After you deploy the backend, put its URL here (with /api on the
 //     end), e.g. 'https://safenet-backend.onrender.com/api' <<<
-const DEPLOYED_API_BASE = 'https://YOUR-BACKEND-URL-HERE.onrender.com/api';
+const DEPLOYED_API_BASE = 'https://safenet-backend-0h1n.onrender.com/api';
 
 const API_BASE = (
     location.hostname === 'localhost' ||
@@ -98,6 +98,35 @@ const SafeNetAPI = (() => {
     const post   = (path, body)   => request(path, { method: 'POST',  body: body instanceof FormData ? body : JSON.stringify(body) });
     const put    = (path, body)   => request(path, { method: 'PUT',   body: body instanceof FormData ? body : JSON.stringify(body) });
 
+    /**
+     * For endpoints that return raw file bytes (e.g. a registrant's uploaded
+     * ID proof) rather than the usual { success, data } JSON envelope —
+     * request() above always calls res.json(), which would fail on binary
+     * content. Fetches the file with the same auth header, then opens it in
+     * a new tab via a temporary object URL.
+     */
+    async function viewFile(path) {
+        const token = getToken();
+        const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+        let res;
+        try {
+            res = await fetch(API_BASE + path, { headers });
+        } catch (networkErr) {
+            throw new Error('Could not reach the SafeNet server.');
+        }
+        if (!res.ok) {
+            let msg = `Request failed (${res.status})`;
+            try { const body = await res.json(); msg = body.error || body.message || msg; } catch {}
+            throw new Error(msg);
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        // Revoke well after the new tab has had time to load it — revoking
+        // immediately can race the new tab's fetch of the blob: URL.
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }
+
     async function login(username, hospitalId, password) {
         const data = await post('/auth/login', { username, hospitalId, password });
         setSession(data.token, {
@@ -156,5 +185,5 @@ const SafeNetAPI = (() => {
         return post('/auth/reset-password', { token, newPassword });
     }
 
-    return { get, post, put, delete: del, login, logout, finishLogout, forgotPassword, resetPassword, requireAuth, getUser, getToken, dashboardFor };
+    return { get, post, put, delete: del, viewFile, login, logout, finishLogout, forgotPassword, resetPassword, requireAuth, getUser, getToken, dashboardFor };
 })();

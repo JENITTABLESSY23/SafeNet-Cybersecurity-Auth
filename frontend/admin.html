@@ -300,7 +300,7 @@
                     <div class="approval-info">
                         <div class="approval-name">${u.firstName} ${u.lastName}</div>
                         <div class="approval-meta">${u.department} · ${u.email}</div>
-                        ${u.idProofPath ? '<span class="view-doc">ID proof on file</span>' : '<span class="view-doc" style="color:var(--muted);">No ID proof uploaded</span>'}
+                        ${u.idProofPath ? `<span class="view-doc" style="cursor:pointer;" onclick="viewIdProof(${u.id})">View ID proof</span>` : '<span class="view-doc" style="color:var(--muted);">No ID proof uploaded</span>'}
                     </div>
                     <div class="approval-actions">
                         <select class="role-select" id="role-${u.id}">
@@ -361,6 +361,14 @@
             `).join('');
         } catch (err) {
             tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--alert);">Could not load staff: ${err.message}</td></tr>`;
+        }
+    }
+
+    async function viewIdProof(userId) {
+        try {
+            await SafeNetAPI.viewFile('/admin/id-proof/' + userId);
+        } catch (err) {
+            alert('Could not open document: ' + err.message);
         }
     }
 
