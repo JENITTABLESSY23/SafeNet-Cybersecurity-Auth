@@ -1,5 +1,6 @@
 package com.safenet.security;
 
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -79,6 +80,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsSource()))
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login")    .permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/register") .permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
