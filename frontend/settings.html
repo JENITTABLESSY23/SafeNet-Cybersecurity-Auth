@@ -77,10 +77,11 @@
             </div>
             <div class="panel-body">
                 <div class="avatar-section">
-                    <div class="avatar-circle">AJ</div>
+                    <div class="avatar-circle" id="avatarCircle">AJ</div>
                     <div class="avatar-actions">
-                        <button class="btn-link">Upload photo</button>
-                        <button class="btn-link danger">Remove photo</button>
+                        <input type="file" id="photoInput" accept="image/jpeg,image/png" style="display:none;" onchange="uploadPhoto()">
+                        <button class="btn-link" onclick="document.getElementById('photoInput').click()">Upload photo</button>
+                        <button class="btn-link danger" onclick="removePhoto()">Remove photo</button>
                         <span style="font-size:11px;color:var(--muted);">JPG or PNG · Max 2 MB</span>
                     </div>
                 </div>
@@ -333,8 +334,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Language</label>
-                        <select class="form-select">
-                            <option selected>English (India)</option>
+                        <select class="form-select" id="langSelect">
+                            <option>English (India)</option>
                             <option>English (US)</option>
                             <option>Hindi</option>
                             <option>Tamil</option>
@@ -342,16 +343,16 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Time Zone</label>
-                        <select class="form-select">
-                            <option selected>IST — Asia/Kolkata (UTC+5:30)</option>
+                        <select class="form-select" id="tzSelect">
+                            <option>IST — Asia/Kolkata (UTC+5:30)</option>
                             <option>UTC</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Date Format</label>
-                    <select class="form-select" style="max-width:280px;">
-                        <option selected>DD/MM/YYYY</option>
+                    <select class="form-select" style="max-width:280px;" id="dateFormatSelect">
+                        <option>DD/MM/YYYY</option>
                         <option>MM/DD/YYYY</option>
                         <option>YYYY-MM-DD</option>
                     </select>
@@ -364,7 +365,7 @@
                     <label class="toggle"><input type="checkbox" id="darkToggle"><span class="toggle-slider"></span></label>
                 </div>
                 <div class="btn-row" style="margin-top:20px;">
-                    <button class="btn-primary" onclick="showToast('Display settings saved')">Save</button>
+                    <button class="btn-primary" onclick="saveDisplayPreferences()">Save</button>
                 </div>
             </div>
         </div>
@@ -436,11 +437,97 @@
             document.getElementById('p-phone').value = u.phone;
             document.getElementById('p-designation').value = u.designation || '';
             document.getElementById('p-department').value = u.department;
+
+            // Display & Language — reflect whatever's actually saved, rather
+            // than always showing the same hardcoded defaults regardless of
+            // what the account has stored.
+            if (u.language)   document.getElementById('langSelect').value = u.language;
+            if (u.timeZone)   document.getElementById('tzSelect').value = u.timeZone;
+            if (u.dateFormat) document.getElementById('dateFormatSelect').value = u.dateFormat;
+            document.getElementById('darkToggle').checked = !!u.darkMode;
+
+            if (u.photoPath) loadAvatarPhoto();
         } catch (err) {
             console.error('Could not load profile:', err.message);
         }
     }
     loadProfile();
+
+    // Fetches the account's own photo (auth-protected, hence the manual
+    // fetch+blob rather than a plain <img src="..."> which can't attach an
+    // Authorization header) and swaps it in for the initials circle.
+    async function loadAvatarPhoto() {
+        try {
+            const token = SafeNetAPI.getToken();
+            const res = await fetch(API_BASE + '/users/me/photo', {
+                headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+            });
+            if (!res.ok) return; // no photo set, or couldn't load — leave initials showing
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const circle = document.getElementById('avatarCircle');
+            circle.style.backgroundImage = `url(${url})`;
+            circle.style.backgroundSize = 'cover';
+            circle.style.backgroundPosition = 'center';
+            circle.textContent = '';
+        } catch (err) {
+            console.error('Could not load avatar photo:', err.message);
+        }
+    }
+
+    async function uploadPhoto() {
+        const input = document.getElementById('photoInput');
+        const file = input.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) { showToast('Photo must be 2 MB or smaller'); input.value = ''; return; }
+
+        const formData = new FormData();
+        formData.append('photo', file);
+        try {
+            const token = SafeNetAPI.getToken();
+            const res = await fetch(API_BASE + '/users/me/photo', {
+                method: 'POST',
+                headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+                body: formData
+            });
+            const body = await res.json();
+            if (!res.ok || !body.success) throw new Error(body.error || body.message || 'Upload failed');
+            await loadAvatarPhoto();
+            showToast('Profile photo updated');
+        } catch (err) {
+            showToast('Could not upload photo: ' + err.message);
+        } finally {
+            input.value = '';
+        }
+    }
+
+    async function removePhoto() {
+        try {
+            await SafeNetAPI.delete('/users/me/photo');
+            const circle = document.getElementById('avatarCircle');
+            circle.style.backgroundImage = '';
+            const u = SafeNetAPI.getUser();
+            const initials = ((u?.fullName || u?.username || '?').trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2)).toUpperCase();
+            circle.textContent = initials;
+            showToast('Profile photo removed');
+        } catch (err) {
+            showToast('Could not remove photo: ' + err.message);
+        }
+    }
+
+    async function saveDisplayPreferences() {
+        try {
+            await SafeNetAPI.put('/users/me/preferences', {
+                language:   document.getElementById('langSelect').value,
+                timeZone:   document.getElementById('tzSelect').value,
+                dateFormat: document.getElementById('dateFormatSelect').value,
+                darkMode:   document.getElementById('darkToggle').checked,
+            });
+            showToast('Display settings saved');
+        } catch (err) {
+            showToast('Could not save display settings: ' + err.message);
+        }
+    }
 
     // Tabs
     function switchTab(id, el) {

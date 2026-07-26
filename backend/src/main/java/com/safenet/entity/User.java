@@ -50,6 +50,23 @@ public class User {
     @Column(name = "id_proof_path")
     private String idProofPath;
 
+    @Column(name = "photo_path")
+    private String photoPath;
+
+    // Display preferences — defaults match what settings.html already shows
+    // as placeholder values, so existing accounts don't see a sudden change.
+    @Column(name = "language")
+    private String language = "English (India)";
+
+    @Column(name = "time_zone")
+    private String timeZone = "IST — Asia/Kolkata (UTC+5:30)";
+
+    @Column(name = "date_format")
+    private String dateFormat = "DD/MM/YYYY";
+
+    @Column(name = "dark_mode")
+    private boolean darkMode = false;
+
     @Column(name = "is_active")
     private boolean isActive = false;
 
@@ -85,6 +102,16 @@ public class User {
     public void      setApprovalStatus(String v)   { approvalStatus = v; }
     public String    getIdProofPath()              { return idProofPath; }
     public void      setIdProofPath(String v)      { idProofPath = v; }
+    public String    getPhotoPath()                { return photoPath; }
+    public void      setPhotoPath(String v)        { photoPath = v; }
+    public String    getLanguage()                 { return language; }
+    public void      setLanguage(String v)         { language = v; }
+    public String    getTimeZone()                 { return timeZone; }
+    public void      setTimeZone(String v)         { timeZone = v; }
+    public String    getDateFormat()               { return dateFormat; }
+    public void      setDateFormat(String v)       { dateFormat = v; }
+    public boolean   isDarkMode()                  { return darkMode; }
+    public void      setDarkMode(boolean v)        { darkMode = v; }
     public boolean   isActive()                    { return isActive; }
     public void      setActive(boolean v)          { isActive = v; }
     public LocalDateTime getLastLogin()            { return lastLogin; }
