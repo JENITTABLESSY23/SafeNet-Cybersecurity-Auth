@@ -65,7 +65,7 @@ public class User {
     private String dateFormat = "DD/MM/YYYY";
 
     @Column(name = "dark_mode")
-    private boolean darkMode = false;
+    private Boolean darkMode = false;
 
     @Column(name = "is_active")
     private boolean isActive = false;
@@ -110,8 +110,11 @@ public class User {
     public void      setTimeZone(String v)         { timeZone = v; }
     public String    getDateFormat()               { return dateFormat; }
     public void      setDateFormat(String v)       { dateFormat = v; }
-    public boolean   isDarkMode()                  { return darkMode; }
-    public void      setDarkMode(boolean v)        { darkMode = v; }
+    // Existing accounts created before this column existed will read back
+    // NULL here — treat that the same as "off" rather than crashing or
+    // requiring a manual data migration.
+    public boolean   isDarkMode()                  { return darkMode != null && darkMode; }
+    public void      setDarkMode(Boolean v)        { darkMode = v; }
     public boolean   isActive()                    { return isActive; }
     public void      setActive(boolean v)          { isActive = v; }
     public LocalDateTime getLastLogin()            { return lastLogin; }
