@@ -1,7 +1,7 @@
-# 🏥 SafeNet — Clinical Access Control & Authentication System
+# 🏥 SafeNet — A Hybrid XGBoost And Isolation Forest-Based IoT Anomaly Detection System For Clinical Access Control In Hospital Environments
 
-> **VSB Engineering College, Karur — 2028/2029 Batch**
-> 2nd Year & 3rd Year · Project Implementation Phase
+> **VSB Engineering College, Karur — 2028 Batch**
+> 3rd Year · Project Implementation Phase
 
 A full-stack hospital information security system featuring **Role-Based Access Control (RBAC)**, **IoT anomaly detection using Isolation Forest**, and a multi-department clinical portal.
 
@@ -63,44 +63,6 @@ safenet/
 │
 └── README.md
 ```
-
----
-
-## ✅ Deliverable Checklist (per submission schedule)
-
-| Date | Activity | Deliverable | Status |
-|------|----------|-------------|--------|
-| Jun 01 | Project Title Finalization | Approved Project Title | ✅ |
-| Jun 02 | Requirement Gathering | Problem Statement | ✅ |
-| Jun 03 | Objective Definition | Project Objectives | ✅ |
-| Jun 04 | User & Module Identification | Module List | ✅ |
-| Jun 05 | Use Case Diagram | `docs/use_case_diagram.png` | ✅ |
-| Jun 06 | Database Requirement Analysis | Table List | ✅ |
-| Jun 07 | ER Diagram Design | `database/er_diagram.png` | ✅ |
-| Jun 08 | Database Schema | `database/schema.sql` | ✅ |
-| Jun 09 | UI Wireframe Design | `docs/wireframes/` | ✅ |
-| Jun 10 | Login & Dashboard UI | `login.html`, dashboards | ✅ |
-| Jun 11 | Navigation & Form Design | All pages linked | ✅ |
-| Jun 12 | Design Review | Design Approved | ✅ |
-| Jun 13 | Frontend Environment Setup | React / static project setup | ✅ |
-| Jun 14 | Login Page Development | `login.html` | ✅ |
-| Jun 15 | Registration Page Development | `register.html` | ✅ |
-| Jun 16 | Dashboard Development | `dashboard_icu.html`, `dashboard_cardio.html` | ✅ |
-| Jun 17 | CRUD Form Development | `patients.html` (Add/Edit/Delete) | ✅ |
-| Jun 18 | Table & Search Features | Patient table with filter/search | ✅ |
-| Jun 19 | Frontend Testing | Frontend Review | ✅ |
-| Jun 20 | Spring Boot Project Setup | `backend/` scaffold | ✅ |
-| Jun 21 | Database Connectivity | DB Connection | ✅ |
-| Jun 22 | Entity & Repository Creation | Entity Classes | ✅ |
-| Jun 23 | REST API Development | CRUD APIs | ✅ |
-| Jun 24 | Authentication Module | Login API + JWT | ✅ |
-| Jun 25 | Backend Business Logic | Service Layer | ✅ |
-| Jun 26 | API Testing | Manual + scripted verification | ✅ |
-| Jun 27 | Frontend–Backend Integration | Working Application | ✅ |
-| Jun 28 | Bug Fixing & Validation | Tested Project | ✅ |
-| Jun 29 | Documentation & PPT | `docs/SafeNet_Project_Report.docx` | ✅ |
-| Jun 30 | Final Demo & Submission | **Final Project Submission** | ⬜ |
-
 ---
 
 ## 🖥️ Pages & Modules
@@ -268,10 +230,10 @@ testing, but replace it with your real origin before deploying anywhere.
 > VSB Engineering College, Karur
 > B.Tech, Artificial Intelligence and Data Science
 
-Developed as an individual project. *(Add your name here.)*
+Developed as an individual project. *(JENITTA BLESSY S)*
 
 ---
 
 ## 📄 License
 
-This project is submitted as an academic deliverable to VSB Engineering College, Karur under the 2028/2029 batch project implementation schedule. All rights reserved.
+This project is submitted as an academic deliverable to VSB Engineering College, Karur under the 2028 batch project implementation schedule. All rights reserved.
