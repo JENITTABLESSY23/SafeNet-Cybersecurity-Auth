@@ -876,8 +876,41 @@ tbody tr:hover { background: #F8FAFD; }
 @media (max-width: 900px) {
   body.auth-body { padding: 16px; }
   .card { padding: 32px 24px 28px; }
-  aside { position: relative; height: auto; min-height: 0; width: 100%; }
-  body.app-body { flex-direction: column; }
+
+  /* Off-canvas sidebar drawer — replaces the old per-page inconsistent
+     behavior (some pages hid the sidebar entirely below 768px with no way
+     back in without rotating to landscape; others squeezed it into a
+     full-width stacked block above the content). One consistent pattern
+     now, everywhere: sidebar starts off-screen, a hamburger button (see
+     .mobile-nav-toggle below, injected by js/mobile-nav.js) slides it in
+     as an overlay, and a dimmed scrim behind it can be tapped to close. */
+  aside {
+    position: fixed; top: 0; left: 0; height: 100vh;
+    width: 260px; max-width: 82vw;
+    transform: translateX(-100%);
+    transition: transform 0.28s var(--ease);
+    z-index: 900;
+    box-shadow: 10px 0 32px rgba(0,0,0,0.35);
+  }
+  aside.mobile-open { transform: translateX(0); }
+
+  .mobile-nav-scrim {
+    display: none; position: fixed; inset: 0;
+    background: rgba(4,10,22,0.55); z-index: 899;
+  }
+  .mobile-nav-scrim.open { display: block; }
+
+  .mobile-nav-toggle {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; top: 14px; left: 14px; z-index: 901;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--paper); border: 1px solid var(--line);
+    box-shadow: 0 4px 14px rgba(15,23,42,0.16);
+    color: var(--ink); cursor: pointer;
+  }
+}
+@media (min-width: 901px) {
+  .mobile-nav-toggle, .mobile-nav-scrim { display: none !important; }
 }
 @media (max-width: 480px) {
   .dept-pills, .form-row { grid-template-columns: 1fr; }
